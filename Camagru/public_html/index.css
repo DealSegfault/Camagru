@@ -1,0 +1,53 @@
+body {
+    font-family: 'Source Sans';
+}
+
+header {
+    background-color: #ddd;
+    display: flow-root;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding-bottom: 8px;
+}
+
+.mybuttons {
+    display: flex;
+    float: right;
+}
+
+#myaccount {
+    margin-left: 500px;
+}
+.welcome {
+    float: left;
+    margin-left: 12px;
+}
+
+.container {
+    top: 154px;
+    position: absolute;
+    width: 99%;
+}
+
+.photos {
+    border: 1px solid #ccc;
+    margin: auto;
+    width: 804px;
+    padding: 10px;
+}
+
+.snapsave {
+    width: 67%;
+    margin: auto;
+}
+
+.mypictures {
+    top: 150px;
+}
+
+.edituser {
+    
+}
