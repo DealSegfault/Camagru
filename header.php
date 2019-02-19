@@ -17,15 +17,21 @@ if ($_SESSION['logged_in'] <> "")
 }
 elseif ($_SESSION['rereq'] == "")
 {?>
-	Login: <?php echo htmlspecialchars($_GET['error']).'</br>';?>
-	<?php if (htmlspecialchars($_GET['error']) == "Account non actif")
+
+	Login: <?php 
+		if ($_GET['error'])
+		{
+			echo htmlspecialchars($_GET['error']).'</br>';
+		}
+	?>
+	<?php if ($_GET['error'] && htmlspecialchars($_GET['error']) == "Account non actif")
 	{
 		echo '<form method="post" action="include/login.php">
 		<input type="email" name="mail" placeholder="Email of registration">
 		<button name="submit" value="resend">Resend link</button>
 		</form>';
 	}?>
-	<?php if (htmlspecialchars($_GET['error']) == "Combinaisons incorrectes")
+	<?php if ($_GET['error'] && htmlspecialchars($_GET['error']) == "Combinaisons incorrectes")
 	{
 		echo '<form method="post" action="include/login.php">
 		<input type="email" name="mail" placeholder="Your Email">

@@ -1,16 +1,23 @@
 <?php
 	
-	function request($request)
+	function request($request) // doteb@next2cloud.info
 	{
-		$pdo = new PDO('mysql:host=localhost;dbname=u511364933_camag', "u511364933_user",  "publicpass");
-		$req = $pdo->prepare($request);
-		$req->execute();
-		return ($req);
+		try {
+			$pdo = new PDO('mysql:host=localhost;dbname=Camagru', "root",  "password");
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$req = $pdo->prepare($request);
+			$req->execute();
+			return ($req);
+		} catch (PDOException $e) {
+			echo 'Connection failed: ' . $e->getMessage();
+			header("Location:index.php");
+		}
+		$pdo = new PDO('mysql:host=localhost;dbname=camgru', "root",  "password");
 
 	}
 	
 	function isAdmin($user)
-	{
+	{		
 		$req = request("SELECT `admin` FROM `users` WHERE `user`='".$user."'");
 		if ($req->rowCount() > 0)
 		{
@@ -58,6 +65,16 @@
 		$token = hash("sha256", $user.$mail.$password.rand());
 		if ($cpass <> $password)
 			return (3);
+		$check = checkPassword($password);
+		if (strlen($check) > 5)
+		{
+			?>
+				<script language="javascript">
+				window.alert($check);				
+				</script>
+			<?php
+			return (5);	
+		}
 		$req = request("SELECT 'active' FROM `users` WHERE `mail`='".$mail."' OR `user`='".$user."'");
 		if ($req->rowCount() > 0)
 			return (4);
@@ -91,10 +108,36 @@
 		return (3);
 	}
 
+	function checkPassword($pwd) {
+		$errors = [];
+		if (strlen($pwd) < 8) {
+			$errors[] = "Password too short!";
+		}
+	
+		if (!preg_match("#[0-9]+#", $pwd)) {
+			$errors[] = "Password must include at least one number!";
+		}
+	
+		if (!preg_match("#[a-zA-Z]+#", $pwd)) {
+			$errors[] = "Password must include at least one letter!";
+		}     
+		return ($errors);
+	}
+
 	function modifPassword($user, $password, $newpass)
 	{
 		if (($res = connectUser($user, $password)) == 1)
 		{
+			$check = checkPassword($password);
+			if (strlen($check) > 5)
+			{
+				?>
+					<script language="javascript">
+					window.alert($check);				
+					</script>
+				<?php
+				return (0);	
+			}
 			$req = request("UPDATE `users` SET `passwd`='".hash("sha256", $newpass)."' WHERE `user`='".$user."' AND `passwd`='".hash("sha256", $password)."'");
 			return (1);
 		}
@@ -120,6 +163,7 @@
 		}
 		return (0);
 	}
+	
 	function deleteAccount($user, $password)
 	{
 		if (connectUser($user, $password) == 1)
@@ -168,6 +212,7 @@
 		else
 			return (0);
 	}
+	
 	function getToken($mail)
 	{
 		$mail = htmlspecialchars($mail);
@@ -202,6 +247,7 @@
 		else
 			return (2);
 	}
+	
 	function getUser($id)
 	{
 		$request = request("SELECT user FROM users WHERE id='".$id."'");
@@ -209,6 +255,7 @@
 		$user = $user['user'];
 		return $user;
 	}
+
 	function getID($user)
 	{
 		//Get id of the user
@@ -217,6 +264,7 @@
 		$user = $user['id'];
 		return $user;
 	}
+	
 	function saveComment($user, $comment, $id_pic)
 	{
 		$user = htmlspecialchars($user);
@@ -231,6 +279,37 @@
 		$request = request("INSERT INTO comment VALUES (NULL, '".$comment."', '".$id_pic."', '".$user."', '".time()."')");
 	}
 
+	function addLike($id_p, $user)
+	{
+		$id_p = htmlspecialchars($id_p);
+		$user = htmlspecialchars($user);
+		$user = getID($user);
+
+		$req = request("SELECT 'id_user' FROM `like_p` WHERE `id_p`='".$id_p."'");
+		if ($req->rowCount() > 0)
+			return (2);
+		$request = request("INSERT INTO like_p VALUE ('".$id_p."', '".$user."')");
+		return (1);
+	}
+
+	function removeLike($id_p, $user)
+	{
+		$id_p = htmlspecialchars($id_p);
+		$user = htmlspecialchars($user);
+		$user = getID($user);
+		$request = request("DELETE FROM like_p WHERE id_p='".$id_p."' AND id_user='".$user."'");
+	}
+
+	function countLike($id_p)
+	{
+		$id_p = htmlspecialchars($id_p);
+		$request = request("SELECT * FROM like_p WHERE id_p='".$id_p."'");
+		$result = $request->rowCount();
+		if ($result <= 0)
+			return 0;
+		return ($result);
+	}
+	
 	function deleteComment($id_com, $user)
 	{
 		$id_com = htmlspecialchars($id_com);

@@ -5,7 +5,7 @@
 
 	$id = htmlspecialchars($_GET['id']);
 	if ($id == "")
-		$id = $_POST['id'];
+		$id = htmlspecialchars($_POST['id']);
 	$action = htmlspecialchars($_POST['submit']);
 	if ($_POST["comment"] == "Send" && $_SESSION["logged_in"] != "")
 	{
@@ -25,9 +25,20 @@
 			header("Location: index.php");
 		}
 	}
+	if (isset($_POST["likebut"]) && $_SESSION["logged_in"])
+	{
+		$res = addLike($_POST["id"], $_SESSION["logged_in"]);
+		if ($res == 2)
+		{
+			removeLike($_POST["id"], $_SESSION["logged_in"]);
+		}
+		header("Location: img.php?id=".$_POST["id"]);
+	}
 	if ($id == "" || $_SESSION['logged_in'] == "")
 			header("Location: index.php");
 	$request = request("SELECT data FROM users LEFT JOIN photos ON users.id = photos.id_user WHERE id_p='".$id."'");
+	if (!$request)
+		die("File not found");
 	$data = $request->fetch();
 	if ($request->rowCount() == 0)
 		header("Location: index.php");
@@ -35,6 +46,10 @@
 
 	$request = request("SELECT * FROM comment WHERE id_pic='".$id."'");
 	$comment = $request->fetchAll();
+
+	$like_request = countLike($id);
+	// echo $like_request;
+
 	$k = 0;
 	$com = "";
 ?>
@@ -52,8 +67,14 @@
 	<?php include "header.php"; ?>
 </header>
 	<div class="container">
-		<img id="mypic" src="<?php echo $img;?>">
-		<div class="comment">
+		<img id="mypic" src="<?php echo $img;?>"></br>
+		<form action="img.php" id="form_like" method="post">
+			<input style="margin: 0 auto; display: inline;" type="image" name="likepicture" width="20" height="20" src="Res/like.png" onclick="this.form.submit();">
+			<label for="txt"><?php echo $like_request; ?></label></br>			
+			<input type="hidden" name="likebut" value="1"/>
+			<input type="hidden" name="id" value="<?php echo $_GET['id'];?>"></input>
+		</form>
+		<div class="container2">
 				<form action="img.php" id="form_co" method="POST">
 					<p>
 						<label for="txt">Your message</label></br>
@@ -73,7 +94,6 @@
 					</p>
 				</form>
 		</div>
-
 		<div id="show_comment">
 			<?php
 				foreach ($comment as $key => $value) {
@@ -88,7 +108,7 @@
 		                	<form action="img.php" mehod="GET">
 		                		<input type="hidden" name="id_com_del" value="'.$value['id_com'].'"/>
 		                		<input type="hidden" name="id" value="'.htmlspecialchars($_GET['id']).'"></input>
-		                		<input type="hidden" name="deletecom" value="1"/>
+								<input type="hidden" name="deletecom" value="1"/>
 		                		<input type="image" name="osef" width="20" height="20" src="Res/cross.png" onclick="this.form.submit();"/>
 		                	</form>';
 		                if ($user != "")

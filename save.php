@@ -20,7 +20,7 @@
 	if ($data != "8280d31dfc2c12f5cd37ba846e6b5429" && $data != "f70ee2457104e891d635470ce2eeaad9")
 	{
 		//Compatibility Browser
-		header("Access-Control-Allow-Origin: http://cama-gru.pe.hu");
+		header("Access-Control-Allow-Origin: http://localhost:8080");
 
 		//Get ID
 		$UserID = getID($user);
@@ -28,7 +28,7 @@
 		echo $UserID;
 		if ($UserID != 0)
 		{
-			request("INSERT INTO photos VALUES (NULL, '".$UserID."', '".$data."', 'none', ".time().")");
+			request("INSERT INTO photos VALUES (NULL, '".$UserID."', '".$data."', '0', ".time().")");
 			file_put_contents("Save/".$data.".jpeg", $imgData);
 			echo $data;
 		}

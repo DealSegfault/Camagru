@@ -14,7 +14,7 @@
                 if ($value['data'] != "")
                 {
                     echo'
-                    <a href="http://cama-gru.pe.hu/img.php?id='.$id.'">
+                    <a href="http://localhost:8080/img.php?id='.$id.'">
                         <label for="id'.$k.'">
                             <img src="'.$img.'">
                         </label>

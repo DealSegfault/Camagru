@@ -48,6 +48,27 @@ header {
     top: 150px;
 }
 
-.edituser {
-    
+.display-flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.container2 {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    /* border-color: green; */
+    /* border-style: solid; */
+    height: 200px;
+    align-items: center;
+}
+
+.box2 {
+    background-color: lightgray;
 }

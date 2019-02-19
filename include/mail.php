@@ -5,14 +5,14 @@
 	 
 	    error_reporting( E_ALL );
 	 
-	    $from = "no-reply@cama-gru.pe.hu";
+	    $from = "no-reply@localhost:8080";
 	 
 	    $to = $mail;
 	 
 	    $subject = "Activez votre compte Camagru";
 
-	    $message = file_get_contents("http://www.cama-gru.pe.hu/include/mail/trump.php");
-		$message = str_replace("MYURLTOKEN", "http://www.cama-gru.pe.hu/include/login.php?token=".$token."&email=".htmlspecialchars($mail), $message);
+	    $message = file_get_contents("http://localhost:8080/include/mail/trump.php");
+		$message = str_replace("MYURLTOKEN", "http://localhost:8080/include/login.php?token=".$token."&email=".htmlspecialchars($mail), $message);
 	    $headers  = 'MIME-Version: 1.0' . "\r\n";
     	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     	$headers .= "From:" . $from;
@@ -32,8 +32,8 @@
 	    $to = $mail;
 	    $subject = "Reset Password";
 
-	    $message = file_get_contents("http://www.cama-gru.pe.hu/include/mail/reset.php");
-		$message = str_replace("MYURLTOKEN", "http://www.cama-gru.pe.hu/", $message);
+	    $message = file_get_contents("http://localhost:8080/include/mail/reset.php");
+		$message = str_replace("MYURLTOKEN", "http://localhost:8080/", $message);
 		$message = str_replace("NEWPASSWORD", $newpass, $message);
 	    $headers  = 'MIME-Version: 1.0' . "\r\n";
     	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -50,14 +50,14 @@
 	 
 	    error_reporting( E_ALL );
 	 
-	    $from = "no-reply@cama-gru.pe.hu";
+	    $from = "no-reply@localhost:8080";
 	 
 	    $to = $mail;
 	 
 	    $subject = "Bannisement aux frontieres";
 
-	    $message = file_get_contents("http://www.cama-gru.pe.hu/include/mail/cm.php");
-		$message = str_replace("MYURLTOKEN", "http://www.cama-gru.pe.hu/include/login.php?token=".$token."&email=".htmlspecialchars($mail), $message);
+	    $message = file_get_contents("http://localhost:8080/include/mail/cm.php");
+		$message = str_replace("MYURLTOKEN", "http://localhost:8080/include/login.php?token=".$token."&email=".htmlspecialchars($mail), $message);
 	    $headers  = 'MIME-Version: 1.0' . "\r\n";
     	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
     	$headers .= "From:" . $from;
